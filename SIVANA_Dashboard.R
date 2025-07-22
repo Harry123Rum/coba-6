@@ -29,13 +29,13 @@ library(broom)
 # Data loading and preparation
 load_data <- function() {
   # Load CSV data
-  sovi_data <- read.csv("sovi_data.csv", stringsAsFactors = FALSE)
+  sovi_data <- read.csv("C:/Users/HARRY PENTALEON/Downloads/sovi_data.csv", stringsAsFactors = FALSE)
   
   # Load shapefile data if available
   shp_data <- NULL
   tryCatch({
-    if (file.exists("sovi_administrasi_kabupaten.shp")) {
-      shp_data <- st_read("sovi_administrasi_kabupaten.shp", quiet = TRUE)
+    if (file.exists("C:/Users/HARRY PENTALEON/Downloads/sovi_administrasi_kabupaten.shp")) {
+      shp_data <- st_read("C:/Users/HARRY PENTALEON/Downloads/sovi_administrasi_kabupaten.shp", quiet = TRUE)
     }
   }, error = function(e) {
     print("Shapefile not found or error loading shapefile")
@@ -886,13 +886,6 @@ server <- function(input, output, session) {
     # Create color palette
     pal <- colorNumeric(palette = input$color_palette, domain = map_data[[input$map_var]], na.color = "transparent")
     
-    # Create popup text that doesn't rely on DISTRICTCODE if it doesn't exist
-    popup_text <- if("DISTRICTCODE" %in% names(map_data)) {
-      paste0("District: ", map_data$DISTRICTCODE, "<br>", input$map_var, ": ", map_data[[input$map_var]])
-    } else {
-      paste0(input$map_var, ": ", map_data[[input$map_var]])
-    }
-    
     leaflet(map_data) %>%
       addTiles() %>%
       addPolygons(
@@ -902,7 +895,7 @@ server <- function(input, output, session) {
         color = "white",
         dashArray = "3",
         fillOpacity = 0.7,
-        popup = popup_text
+        popup = ~paste0("District: ", DISTRICTCODE, "<br>", input$map_var, ": ", get(input$map_var))
       ) %>%
       addLegend(pal = pal, values = ~get(input$map_var), opacity = 0.7, title = input$map_var, position = "bottomright")
   })
