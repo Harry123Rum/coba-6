@@ -886,6 +886,13 @@ server <- function(input, output, session) {
     # Create color palette
     pal <- colorNumeric(palette = input$color_palette, domain = map_data[[input$map_var]], na.color = "transparent")
     
+    # Create popup text that doesn't rely on DISTRICTCODE if it doesn't exist
+    popup_text <- if("DISTRICTCODE" %in% names(map_data)) {
+      paste0("District: ", map_data$DISTRICTCODE, "<br>", input$map_var, ": ", map_data[[input$map_var]])
+    } else {
+      paste0(input$map_var, ": ", map_data[[input$map_var]])
+    }
+    
     leaflet(map_data) %>%
       addTiles() %>%
       addPolygons(
@@ -895,7 +902,7 @@ server <- function(input, output, session) {
         color = "white",
         dashArray = "3",
         fillOpacity = 0.7,
-        popup = ~paste0("District: ", DISTRICTCODE, "<br>", input$map_var, ": ", get(input$map_var))
+        popup = popup_text
       ) %>%
       addLegend(pal = pal, values = ~get(input$map_var), opacity = 0.7, title = input$map_var, position = "bottomright")
   })
