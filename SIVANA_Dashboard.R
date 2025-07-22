@@ -29,13 +29,13 @@ library(broom)
 # Data loading and preparation
 load_data <- function() {
   # Load CSV data
-  sovi_data <- read.csv("C:/Users/HARRY PENTALEON/Downloads/sovi_data.csv", stringsAsFactors = FALSE)
+  sovi_data <- read.csv("sovi_data.csv", stringsAsFactors = FALSE)
   
   # Load shapefile data if available
   shp_data <- NULL
   tryCatch({
-    if (file.exists("C:/Users/HARRY PENTALEON/Downloads/sovi_administrasi_kabupaten.shp")) {
-      shp_data <- st_read("C:/Users/HARRY PENTALEON/Downloads/sovi_administrasi_kabupaten.shp", quiet = TRUE)
+    if (file.exists("sovi_administrasi_kabupaten.shp")) {
+      shp_data <- st_read("sovi_administrasi_kabupaten.shp", quiet = TRUE)
     }
   }, error = function(e) {
     print("Shapefile not found or error loading shapefile")
